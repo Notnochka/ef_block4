@@ -2,9 +2,10 @@
 namespace mvc\controllers\UserController;
 
 $container = require __DIR__ . '/../config/container.php';
-$service = $container->get(UserService::class);
+$service = $container->get('UserService');
 $users = $service->getUsers();
 require_once __DIR__ . '/../views/users.php';
+
 
 class UserController {
     public function index() {

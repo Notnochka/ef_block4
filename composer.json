@@ -5,6 +5,9 @@
         }
     },
     "require": {
-        "php-di/php-di": "^7.1"
+        "php-di/php-di": "^7.1",
+        "react/event-loop": "^1.6",
+        "react/http": "^1.11",
+        "predis/predis": "^3.4"
     }
 }
