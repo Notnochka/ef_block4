@@ -1,31 +1,37 @@
 <?php
-
 namespace mvc\models\User;
 
 class User {
-    private $pdo;
+    private static $pdo = null;
 
-    public function __construct() {
-        $config = require __DIR__ . '/../config/database.php';
-        $this->pdo = new \PDO($config['dsn'], $config['user'], $config['pass']);
-        $this->pdo->setAttribute(\PDO::ATTR_ERRMODE, \PDO::ERRMODE_EXCEPTION);
-    }
-
-    public function all() {
-        $stmt = $this->pdo->query('SELECT * FROM users');
-        return $stmt->fetchAll(\PDO::FETCH_ASSOC);
-    }
-
-    private static function getConnection() {
-        $config = require __DIR__ . '/../config/database.php';
-        $pdo = new \PDO($config['dsn'], $config['user'], $config['pass']);
-        $pdo->setAttribute(\PDO::ATTR_ERRMODE, \PDO::ERRMODE_EXCEPTION);
-        return $pdo;
+    public static function getPdo() {
+        if (self::$pdo === null) {
+            $config = require __DIR__ . '/../config/database.php';
+            self::$pdo = new PDO($config['dsn'], $config['user'], $config['pass']);
+            self::$pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+            self::$pdo->exec('SET NAMES utf8');
+        }
+        return self::$pdo;
     }
 
     public static function getAll() {
-        $pdo = self::getConnection();
-        $stmt = $pdo->query('SELECT * FROM users');
-        return $stmt->fetchAll(\PDO::FETCH_ASSOC);
+        $pdo = self::$pdo ?? self::getPdo();
+        $stmt = $pdo->query('SELECT id, name, email, created_at FROM users ORDER BY id');
+        return $stmt->fetchAll(PDO::FETCH_ASSOC);
+    }
+
+    public static function find($id) {
+        $pdo = self::getPdo();
+        $stmt = $pdo->prepare('SELECT * FROM users WHERE id = ?');
+        $stmt->execute([$id]);
+        return $stmt->fetch(PDO::FETCH_ASSOC);
+    }
+    
+    public static function create(array $data) {
+        $pdo = self::getPdo();
+        $stmt = $pdo->prepare('INSERT INTO users (name, email) VALUES (?, ?)');
+        $stmt->execute([$data['name'], $data['email']]);
+        return self::$pdo->lastInsertId();
     }
 }
+

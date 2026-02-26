@@ -1,15 +1,15 @@
 <?php
 namespace mvc\controllers\UserController;
 
-$container = require __DIR__ . '/../config/container.php';
-$service = $container->get('UserService');
-$users = $service->getUsers();
-require_once __DIR__ . '/../views/users.php';
-
+use mvc\services\UserService;
+use mvc\models\UserRepository;
 
 class UserController {
-    public function index() {
-        $service = new UserService(new UserRepository());
+    private $userService;
+
+    public function action_index() {
+        $repository = new UserRepository();
+        $service = new UserService($repository);
         $users = $service->getUsers();
         require_once __DIR__ . '/../views/users.php';
     }

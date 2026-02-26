@@ -2,22 +2,20 @@
 
 namespace mvc\models\UserRepository;
 
-require_once __DIR__ . '/../config/database.php';
-require_once __DIR__ . '/UserRepositoryInterface.php';
+use PDO;
 
-class UserRepository implements UserRepositoryInterface {
-    private static ?PDO $pdo = null;
+class UserRepository {
+    private $pdo;
 
-    private static function getConnection(): PDO {
-        if (self::$pdo === null) {
-            $config = require __DIR__ . '/../config/database.php';
-            self::$pdo = new PDO($config['dsn'], $config['username'], $config['password']);
-        }
-        return self::$pdo;
+    public function __construct() {
+        $config = require __DIR__ . '/../config/database.php';
+        $this->pdo = new PDO($config['dsn'], $config['user'], $config['pass']);
+        $this->pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+        $this->pdo->exec('SET NAMES utf8');
     }
 
-    public function getAll(): array {
-        $stmt = self::getConnection()->query('SELECT id, name, email FROM users');
+    public function findAll() {
+        $stmt = $this->pdo->query('SELECT id, name, email, created_at FROM users ORDER BY id');
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
 }

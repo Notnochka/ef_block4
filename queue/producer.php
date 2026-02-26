@@ -23,4 +23,4 @@ for ($i = 1; $i <= 3; $i++) {
 }
 
 $redis->rpush('tasks', json_encode(['quit' => true]));
-echo "✅ Послано QUIT сообщение\n";
+echo "Послано QUIT сообщение\n";

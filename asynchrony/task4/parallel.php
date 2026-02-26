@@ -1,40 +1,28 @@
 <?php
 require 'vendor/autoload.php';
 
-use React\EventLoop\Loop;
-use Clue\React\Buzz\Browser;
-use React\Promise\PromiseInterface;
+use React\Http\Browser;
+use function React\Promise\all;
 
-$loop = Loop::get();
+$loop = \React\EventLoop\Factory::create();
 $browser = new Browser($loop);
 
-$urls = [
-    'https://jsonplaceholder.typicode.com/users/1',
-    'https://jsonplaceholder.typicode.com/posts/1', 
-    'https://jsonplaceholder.typicode.com/comments/1',
-    'https://httpbin.org/delay/1',
+$promises = [
+    'API 1' => $browser->get('https://httpbin.org/json'),
+    'API 2' => $browser->get('https://httpbin.org/uuid'),
+    'API 3' => $browser->get('https://httpbin.org/user-agent'),
 ];
 
-$startTime = microtime(true);
-
-echo "Запуск " . count($urls) . " параллельных запросов...\n";
-
-$promises = array_map(fn($url) => $browser->get($url), $urls);
-
-PromiseInterface::all($promises)
-    ->then(function (array $responses) use ($startTime) {
-        $endTime = microtime(true);
-        echo "\n Все запросы выполнены за " . round(($endTime - $startTime) * 1000, 2) . "мс\n";
-        
-        foreach ($responses as $i => $response) {
-            $url = $urls[$i];
-            $status = $response->getStatusCode();
-            $size = strlen($response->getBody()->getContents());
-            echo "$url [$status] {$size}б\n";
+all($promises)->then(
+    function (array $responses) {
+        foreach ($responses as $name => $response) {
+            echo "$name: Статус {$response->getStatusCode()}, длина: " . strlen($response->getBody()->getContents()) . "\n";
         }
-    })
-    ->otherwise(function ($e) {
-        echo "Ошибка: " . $e->getMessage() . "\n";
-    });
+        echo "Все запросы выполнены параллельно!\n";
+    },
+    function ($error) {
+        echo "Ошибка: " . $error->getMessage() . "\n";
+    }
+);
 
 $loop->run();

@@ -1,5 +1,5 @@
 <?php
-namespace mvc\models\UserRepositoryInterface;
+namespace di\UserRepositoryInterface;
 
 interface UserRepositoryInterface {
     public function getAll(): array;

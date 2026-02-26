@@ -14,4 +14,10 @@ Route::get('dashboard', function () {
     return Inertia::render('dashboard');
 })->middleware(['auth', 'verified'])->name('dashboard');
 
+Route::get('/dispatch-jobs', function () {
+    dispatch(new \App\Jobs\QueueJob('Test message', auth()->id()));
+    return 'Jobs dispatched!';
+});
+
+
 require __DIR__.'/settings.php';

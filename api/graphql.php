@@ -7,7 +7,7 @@ use GraphQL\Type\Definition\ObjectType;
 use GraphQL\Type\Definition\Type;
 use GraphQL\Utils\SchemaPrinter;
 
-$schemaString = file_get_contents(__DIR__ . '/schema.graphql');
+$schemaString = file_get_contents(__DIR__ . '/graphql/schema.graphql');
 $schemaString .= "\n\n# Автогенерированные типы\n";
 
 $users = [
@@ -42,4 +42,3 @@ $result = GraphQL::executeQuery($schema, $query);
 
 header('Content-Type: application/json');
 echo json_encode($result->toArray(JSON_PRETTY_PRINT));
-?>

@@ -1,18 +1,20 @@
 <?php
 namespace mvc\services\UserService;
 
-require_once __DIR__ . '/../models/User.php';
-require_once __DIR__ . '/../models/UserRepository.php';
+use mvc\models\UserRepository;
 
 class UserService {
-    public function __construct(private UserRepositoryInterface $repository) {}
-    
-    public function getAll() {
-        $userModel = new User();
-        return $userModel->all();
+    private $userRepository;
+
+    public function __construct(UserRepository $userRepository) {
+        $this->userRepository = $userRepository;
     }
 
-    public function getUsers(): array {
-        return $this->repository->getAll();
+    public function getUsers() {
+        $users = $this->userRepository->findAll();
+        
+        usort($users, fn($a, $b) => strcmp($a['name'], $b['name']));
+        
+        return array_filter($users, fn($user) => !empty($user['name']));
     }
 }

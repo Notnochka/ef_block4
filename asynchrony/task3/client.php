@@ -2,7 +2,7 @@
 require 'vendor/autoload.php';
 
 use React\EventLoop\Loop;
-use Clue\React\Buzz\Browser;
+use React\Buzz\Browser;
 
 $loop = Loop::get();
 
