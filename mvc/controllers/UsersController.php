@@ -1,7 +1,8 @@
 <?php
 namespace mvc\controllers\UsersController;
 
-use mvc\services\UserService;
+use mvc\services\UserService\UserService;
+use mvc\models\UserRepository\UserRepository;
 use mvc\views\UserView;
 
 class UsersController {
@@ -9,12 +10,13 @@ class UsersController {
     private $view;
 
     public function __construct() {
-        $this->userService = new UserService();
+        $userRepository = new UserRepository();
+        $this->userService = new UserService($userRepository);
         $this->view = new UserView();
     }
 
     public function action_index() {
-        $users = $this->userService->getUsersList();
+        $users = $this->userService->getUsers();
         $this->view->render('users/index.php', ['users' => $users]);
     }
 }

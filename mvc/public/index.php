@@ -1,12 +1,12 @@
 <?php
-require 'vendor/autoload.php';
-require_once '../routes/web.php';
+require '../vendor/autoload.php';
 
-$path = parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH);
-if ($path === '/users') {
-    $controller = new controllers\UsersController();
-    $controller->index();
-} else {
-    http_response_code(404);
-    echo 'Not Found';
-}
+use mvc\routes\Router;
+
+$routes = require '../routes/web.php';
+$router = new Router($routes);
+
+$method = $_SERVER['REQUEST_METHOD'];
+$uri = $_SERVER['REQUEST_URI'];
+
+$router->dispatch($method, $uri);

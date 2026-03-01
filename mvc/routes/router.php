@@ -1,31 +1,28 @@
 <?php
-namespace App\Routes;
+
+namespace mvc\routes;
 
 class Router {
-    public static function start() {
-        $uri = parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH);
-        $routes = explode('/', trim($uri, '/'));
-        $controllerName = !empty($routes[0]) ? ucfirst($routes[0]) . 'Controller' : 'MainController';
-        $actionName = !empty($routes[1]) ? 'action_' . $routes[1] : 'action_index';
+    private array $routes;
 
-        $controllerFile = __DIR__ . '/../controllers/' . strtolower($controllerName) . '.php';
-        if (!file_exists($controllerFile)) {
-            self::error404();
-        }
-        require_once $controllerFile;
-
-        $controllerName = 'App\\Controllers\\' . $controllerName;
-        $controller = new $controllerName();
-        if (method_exists($controller, $actionName)) {
-            $controller->$actionName();
-        } else {
-            self::error404();
-        }
+    public function __construct(array $routes) {
+        $this->routes = $routes;
     }
 
-    private static function error404() {
+    public function dispatch(string $method, string $path): void {
+        $path = parse_url($path, PHP_URL_PATH);
+        
+        if (isset($this->routes[$method][$path])) {
+            [$controllerClass, $action] = $this->routes[$method][$path];
+            
+            if (class_exists($controllerClass) && method_exists($controllerClass, $action)) {
+                $controller = new $controllerClass();
+                $controller->$action();
+                return;
+            }
+        }
+        
         http_response_code(404);
-        require_once __DIR__ . '/../views/404.php';
-        exit;
+        echo 'Not Found';
     }
 }

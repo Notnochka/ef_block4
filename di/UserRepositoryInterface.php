@@ -2,5 +2,5 @@
 namespace di\UserRepositoryInterface;
 
 interface UserRepositoryInterface {
-    public function getAll(): array;
+    public function findAll(): array;
 }

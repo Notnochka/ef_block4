@@ -1,6 +1,7 @@
 <?php
 
 namespace di\UserRepository;
+use di\UserRepositoryInterface\UserRepositoryInterface;
 
 class UserRepository implements UserRepositoryInterface {
     public function findAll(): array {

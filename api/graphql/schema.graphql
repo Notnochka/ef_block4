@@ -5,6 +5,7 @@ type User {
 
 type Query {
   users: [User!]!
+  getUser(id: Int!): User
 }
 
 # Опционально: мутации для создания/обновления

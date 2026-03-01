@@ -1,7 +1,9 @@
 <?php
 
+use mvc\controllers\UsersController\UsersController;
+
 return [
     'GET' => [
-        '/users' => ['controllers\UsersController', 'index'],
+        '/users' => [UsersController::class, 'action_index'],
     ],
 ];

@@ -1,7 +1,7 @@
 <?php
 namespace mvc\services\UserService;
 
-use mvc\models\UserRepository;
+use mvc\models\UserRepository\UserRepository;
 
 class UserService {
     private $userRepository;

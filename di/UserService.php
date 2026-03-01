@@ -2,6 +2,8 @@
 
 namespace di\UserService;
 
+use di\UserRepositoryInterface\UserRepositoryInterface;
+
 class UserService {
     public function __construct(private UserRepositoryInterface $repository) {}
 
