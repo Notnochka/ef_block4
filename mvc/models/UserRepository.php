@@ -1,6 +1,6 @@
 <?php
 
-namespace mvc\models\UserRepository;
+namespace mvc\models;
 
 use PDO;
 

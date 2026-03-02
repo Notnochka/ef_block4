@@ -1,5 +1,7 @@
 <?php
-namespace mvc\models\User;
+namespace mvc\models;
+
+use PDO;
 
 class User {
     private static $pdo = null;

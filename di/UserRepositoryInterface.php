@@ -1,5 +1,5 @@
 <?php
-namespace di\UserRepositoryInterface;
+namespace di;
 
 interface UserRepositoryInterface {
     public function findAll(): array;

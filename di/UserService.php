@@ -1,8 +1,8 @@
 <?php
 
-namespace di\UserService;
+namespace di;
 
-use di\UserRepositoryInterface\UserRepositoryInterface;
+use di\UserRepositoryInterface;
 
 class UserService {
     public function __construct(private UserRepositoryInterface $repository) {}

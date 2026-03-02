@@ -1,5 +1,5 @@
 <?php
-namespace mvc\services\UserService;
+namespace mvc\services;
 
 use mvc\models\UserRepository\UserRepository;
 
