@@ -17,7 +17,7 @@ class UsersController {
 
     public function action_index() {
         $users = $this->userService->getUsers();
-        $this->view->render('users/index.php', ['users' => $users]);
+        $this->view->render('users/users.php', ['users' => $users]);
     }
 }
 
